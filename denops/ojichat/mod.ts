@@ -1,5 +1,5 @@
 import { start } from "https://deno.land/x/denops_std@v0.3/mod.ts";
-import ojichat from "https://cdn.skypack.dev/ojichat.js@latest?dts";
+import ojichat from "https://cdn.skypack.dev/ojichat.js@0.0.6?dts";
 
 start(async (vim) => {
   vim.register({
@@ -23,5 +23,4 @@ start(async (vim) => {
   await vim.execute(`
     command! -nargs=? DenopsOjichat echo denops#notify("${vim.name}", "run", ["denops", <f-args>])
   `);
-  console.log("denops-ojichat.vim (std) has loaded");
 });
