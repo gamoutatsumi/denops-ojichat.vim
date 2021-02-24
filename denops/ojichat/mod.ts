@@ -3,21 +3,21 @@ import ojichat from "https://cdn.skypack.dev/ojichat.js@0.0.6?dts";
 
 start(async (vim) => {
   vim.register({
-    async run(app: unknown, name: unknown): Promise<void>{
+    async run(app: unknown, targetName: unknown): Promise<void>{
       if (typeof app !== "string") {
         throw new Error(`'app' in 'say()' of ${vim.name} must be a string`);
       }
 
-      const message = new ojichat.Generator(name).getMessage();
+      if (typeof targetName === "string" || targetName === undefined) {
+        const message = new ojichat.Generator(targetName).getMessage();
 
-      console.log("message", message);
-
-      await vim.cmd(
-        `echomsg printf('%s', message)`,
-        {
-          message,
-        },
-      );
+        await vim.cmd(
+          `echomsg printf('%s', message)`,
+          {
+            message,
+          },
+        );
+      }
     },
   });
   await vim.execute(`
