@@ -8,9 +8,8 @@ start(async (vim) => {
       let target: string | undefined;
       let emoji: number | undefined;
 
-      if (typeof args === "string") {
-        const argsArray: string[] = args.split(' ');
-        const parsedArgs = parse(argsArray, { "--": true });
+      if (Array.isArray(args)) {
+        const parsedArgs = parse(args, { "--": true });
 
         target = parsedArgs._.join(' ');
         emoji = parsedArgs.e ?? parsedArgs.emoji;
@@ -31,6 +30,6 @@ start(async (vim) => {
     },
   });
   await vim.execute(`
-    command! -nargs=? DenopsOjichat echo denops#notify("${vim.name}", "run", [<f-args>])
+    command! -nargs=* DenopsOjichat echo denops#notify("${vim.name}", "run", [[<f-args>]])
   `);
 });
