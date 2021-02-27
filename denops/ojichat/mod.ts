@@ -1,15 +1,25 @@
 import { start } from "https://deno.land/x/denops_std@v0.3/mod.ts";
 import ojichat from "https://cdn.skypack.dev/ojichat.js@0.0.6?dts";
+import { parse } from "https://deno.land/std@0.88.0/flags/mod.ts";
 
 start(async (vim) => {
   vim.register({
-    async run(app: unknown, targetName: unknown): Promise<void>{
-      if (typeof app !== "string") {
-        throw new Error(`'app' in 'say()' of ${vim.name} must be a string`);
+    async run(args: unknown): Promise<void>{
+      let target: string | undefined;
+      let emoji: number | undefined;
+
+      if (typeof args === "string") {
+        const argsArray: string[] = args.split(' ');
+        const parsedArgs = parse(argsArray, { "--": true });
+
+        target = parsedArgs._.join(' ');
+        emoji = parsedArgs.e ?? parsedArgs.emoji;
+      } else if (args !== undefined){
+        throw new Error(`'args' in 'run()' of ${vim.name} must be a string`);
       }
 
-      if (typeof targetName === "string" || targetName === undefined) {
-        const message = new ojichat.Generator(targetName).getMessage();
+      if (typeof target === "string" || target === undefined) {
+        const message = new ojichat.Generator(target, emoji).getMessage();
 
         await vim.cmd(
           `echomsg printf('%s', message)`,
@@ -21,6 +31,6 @@ start(async (vim) => {
     },
   });
   await vim.execute(`
-    command! -nargs=? DenopsOjichat echo denops#notify("${vim.name}", "run", ["denops", <f-args>])
+    command! -nargs=? DenopsOjichat echo denops#notify("${vim.name}", "run", [<f-args>])
   `);
 });
