@@ -7,15 +7,19 @@ start(async (vim) => {
     async run(args: unknown): Promise<void>{
       let target: string | undefined;
       let emoji: number | undefined;
+      let yank: boolean | undefined;
 
       if (Array.isArray(args)) {
         const parsedArgs = parse(args, { "--": true });
 
         target = parsedArgs._.join(' ');
         emoji = parsedArgs.e ?? parsedArgs.emoji;
+        yank = parsedArgs.yank;
       } else if (args !== undefined){
         throw new Error(`'args' in 'run()' of ${vim.name} must be a string`);
       }
+
+      const yankReg = (await vim.call("has", "unix") === 1 || await vim.call("has", "linux") === 1) ? "+" : "*";
 
       if (typeof target === "string" || target === undefined) {
         const message = new ojichat.Generator(target, emoji).getMessage();
@@ -26,6 +30,9 @@ start(async (vim) => {
             message,
           },
         );
+        if (yank) {
+          await vim.call("setreg", yankReg, message);
+        }
       }
     },
   });
