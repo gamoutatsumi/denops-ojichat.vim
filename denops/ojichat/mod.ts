@@ -4,7 +4,7 @@ import { parse } from "https://deno.land/std@0.88.0/flags/mod.ts";
 
 start(async (vim) => {
   vim.register({
-    async run(args: unknown): Promise<void>{
+    async run(args: unknown): Promise<void> {
       let target: string | undefined;
       let emoji: number | undefined;
       let yank: boolean | undefined;
@@ -12,10 +12,10 @@ start(async (vim) => {
       if (Array.isArray(args)) {
         const parsedArgs = parse(args, { "--": true });
 
-        target = parsedArgs._.join(' ');
+        target = parsedArgs._.join(" ");
         emoji = parsedArgs.e ?? parsedArgs.emoji;
         yank = parsedArgs.yank;
-      } else if (args !== undefined){
+      } else if (args !== undefined) {
         throw new Error(`'args' in 'run()' of ${vim.name} must be a string`);
       }
 
