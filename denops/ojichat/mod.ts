@@ -4,7 +4,7 @@ import { parse } from "https://deno.land/std@0.88.0/flags/mod.ts";
 
 start(async (vim) => {
   vim.register({
-    async run(...args: unknown[]): Promise<void> {
+    async run(args: unknown): Promise<void> {
       const yankReg = await vim.v.get("register");
 
       const parsedArgs = parse(args as string[], { "--": true });
@@ -27,6 +27,6 @@ start(async (vim) => {
     },
   });
   await vim.execute(`
-    command! -nargs=* DenopsOjichat echo denops#notify("${vim.name}", "run", [<f-args>])
+    command! -nargs=* DenopsOjichat call denops#notify("${vim.name}", "run", [[<f-args>]])
   `);
 });
