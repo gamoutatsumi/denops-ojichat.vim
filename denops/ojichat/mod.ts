@@ -19,7 +19,7 @@ start(async (vim) => {
         throw new Error(`'args' in 'run()' of ${vim.name} must be a string`);
       }
 
-      const yankReg = (await vim.call("has", "unix") === 1 || await vim.call("has", "linux") === 1) ? "+" : "*";
+      const yankReg = await vim.v.get("register");
 
       if (typeof target === "string" || target === undefined) {
         const message = new ojichat.Generator(target, emoji).getMessage();
