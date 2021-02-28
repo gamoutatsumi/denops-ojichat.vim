@@ -5,6 +5,8 @@ import { parse } from "https://deno.land/std@0.88.0/flags/mod.ts";
 start(async (vim) => {
   vim.register({
     async run(args: unknown): Promise<void> {
+      const yankReg = await vim.v.get("register");
+
       let target: string | undefined;
       let emoji: number | undefined;
       let yank: boolean | undefined;
@@ -15,24 +17,20 @@ start(async (vim) => {
         target = parsedArgs._.join(" ");
         emoji = parsedArgs.e ?? parsedArgs.emoji;
         yank = parsedArgs.yank;
-      } else if (args !== undefined) {
+      } else if (args != null) {
         throw new Error(`'args' in 'run()' of ${vim.name} must be a string`);
       }
 
-      const yankReg = await vim.v.get("register");
+      const message = new ojichat.Generator(target, emoji).getMessage();
 
-      if (typeof target === "string" || target === undefined) {
-        const message = new ojichat.Generator(target, emoji).getMessage();
-
-        await vim.cmd(
-          `echomsg printf('%s', message)`,
-          {
-            message,
-          },
-        );
-        if (yank) {
-          await vim.call("setreg", yankReg, message);
-        }
+      await vim.cmd(
+        `echomsg printf('%s', message)`,
+        {
+          message,
+        },
+      );
+      if (yank) {
+        await vim.call("setreg", yankReg, message);
       }
     },
   });
