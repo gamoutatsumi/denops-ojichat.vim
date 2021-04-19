@@ -1,0 +1,15 @@
+{
+  "https://deno.land/x/denops_std": {
+    "version": "@v0.8",
+    "modules": [
+      "/mod.ts"
+    ]
+  },
+  "https://deno.land/std": {
+    "version": "@0.93.0",
+    "modules": [
+      "/testing/asserts.ts",
+      "/flags/mod.ts"
+    ]
+  }
+}

@@ -1,8 +1,8 @@
-import { start } from "https://deno.land/x/denops_std@v0.3/mod.ts";
+import { main } from "./vendor/https/deno.land/x/denops_std/mod.ts";
 import ojichat from "https://cdn.skypack.dev/ojichat.js@0.0.6?dts";
-import { parse } from "https://deno.land/std@0.88.0/flags/mod.ts";
+import { parse } from "./vendor/https/deno.land/std/flags/mod.ts";
 
-start(async (vim) => {
+main(async ({ vim }) => {
   vim.register({
     async run(args: unknown): Promise<void> {
       const yankReg = await vim.v.get("register");
